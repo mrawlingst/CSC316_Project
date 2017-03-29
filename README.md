@@ -23,23 +23,23 @@ can deal damages to the enemy. In addition to primary spacebar, the player may
 have secondary and maybe third(ary?) fire that can do greater damage at a cost
 (health, time, resource, etc).
 
-### Milestone 1
+### ~~Milestone 1 - 3/24~~ COMPLETED
 * Player movement
   * WASD
 * Keep player within boundary of the screen 
 
-### Milestone 2
+### Milestone 2 - 4/7
 * Basic combat - the player is able to perform a melee attack and shoot a
 projectile
 * Health system - the player and enemy has health and can lose health due to
 attacks
 
-### Milestone 3
+### Milestone 3 - 4/21
 * Basic AI - enemy able to make decisions based on player’s actions 
 * Unique patterns for enemy - create few unique patterns of movements and
 attacks for enemy that is challenging enough for player
 
-### Milestone 4
+### Milestone 4 - 5/5
 * Menu
   * Allow player to pick close or long range combat
 * Enemy #2 - implement unique patterns
