@@ -10,6 +10,7 @@ namespace CSC316_Project
         SpriteBatch spriteBatch;
 
         Model player;
+        Vector3 playerPos;
         Vector3 camPos;
 
         public Game1()
@@ -21,6 +22,7 @@ namespace CSC316_Project
         protected override void Initialize()
         {
             camPos = new Vector3(0, 0, 250f);
+            playerPos = Vector3.Zero;
 
             base.Initialize();
         }
@@ -43,6 +45,18 @@ namespace CSC316_Project
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            if (Keyboard.GetState().IsKeyDown(Keys.W))
+                playerPos += new Vector3(0, 1, 0);
+
+            if (Keyboard.GetState().IsKeyDown(Keys.S))
+                playerPos -= new Vector3(0, 1, 0);
+
+            if (Keyboard.GetState().IsKeyDown(Keys.A))
+                playerPos -= new Vector3(1, 0, 0);
+
+            if (Keyboard.GetState().IsKeyDown(Keys.D))
+                playerPos += new Vector3(1, 0, 0);
+
             base.Update(gameTime);
         }
 
@@ -54,6 +68,7 @@ namespace CSC316_Project
             Matrix view = Matrix.CreateLookAt(camPos, Vector3.Zero, Vector3.Up);
             Matrix projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, 1, 0.1f, 1000f);
 
+            world = Matrix.CreateTranslation(playerPos);
             player.Draw(world, view, projection);
 
             base.Draw(gameTime);
