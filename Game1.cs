@@ -21,7 +21,7 @@ namespace CSC316_Project
 
         protected override void Initialize()
         {
-            camPos = new Vector3(0, 0, 250f);
+            camPos = new Vector3(0, 0, 5);
             playerPos = Vector3.Zero;
 
             base.Initialize();
@@ -66,9 +66,9 @@ namespace CSC316_Project
 
             Matrix world = Matrix.Identity;
             Matrix view = Matrix.CreateLookAt(camPos, Vector3.Zero, Vector3.Up);
-            Matrix projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.PiOver4, 1, 0.1f, 1000f);
+            Matrix projection = Matrix.CreateOrthographic(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height, 0.1f, 1000.0f);
 
-            world = Matrix.CreateTranslation(playerPos);
+            world = Matrix.CreateScale(3, 3, 1) * Matrix.CreateTranslation(playerPos);
             player.Draw(world, view, projection);
 
             base.Draw(gameTime);
