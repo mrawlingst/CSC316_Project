@@ -86,6 +86,14 @@ namespace CSC316_Project
             if (Keyboard.GetState().IsKeyDown(Keys.D) && playerPos.X < 390)
                 playerPos += new Vector3(1, 0, 0);
 
+            if (Vector3.Distance(playerPos, enemyPos) <= 60)
+            {
+                if (Keyboard.GetState().IsKeyDown(Keys.Space))
+                {
+                    enemyCurrentHealth -= 10;
+                }
+            }
+
             updateHealth();
 
             base.Update(gameTime);
@@ -104,8 +112,11 @@ namespace CSC316_Project
             player.Draw(world, view, projection);
 
             // Enemy
-            world = Matrix.CreateScale(15, 15, 1) * Matrix.CreateTranslation(enemyPos);
-            enemy.Draw(world, view, projection);
+            if (enemyCurrentHealth > 0)
+            {
+                world = Matrix.CreateScale(15, 15, 1) * Matrix.CreateTranslation(enemyPos);
+                enemy.Draw(world, view, projection);
+            }
 
             spriteBatch.Begin();
 
@@ -126,10 +137,10 @@ namespace CSC316_Project
 
         void updateHealth()
         {
-            if (Keyboard.GetState().IsKeyDown(Keys.Left))
-                enemyCurrentHealth--;
-            if (Keyboard.GetState().IsKeyDown(Keys.Right))
-                enemyCurrentHealth++;
+            //if (Keyboard.GetState().IsKeyDown(Keys.Left))
+                //enemyCurrentHealth--;
+            //if (Keyboard.GetState().IsKeyDown(Keys.Right))
+                //enemyCurrentHealth++;
 
             // Player
             playerCurrentHealth = MathHelper.Clamp(playerCurrentHealth, 0, playerMaxHealth);
