@@ -18,6 +18,14 @@ namespace CSC316_Project
         float playerHealthValue;
         Texture2D playerHealthBar;
 
+        // Enemy
+        Model enemy;
+        Vector3 enemyPos;
+        int enemyCurrentHealth;
+        int enemyMaxHealth;
+        float enemyHealthValue;
+        Texture2D enemyHealthBar;
+
         // Camera
         Vector3 camPos;
 
@@ -36,6 +44,11 @@ namespace CSC316_Project
             playerCurrentHealth = playerMaxHealth = 100;
             playerHealthValue = (float)playerCurrentHealth / (float)playerMaxHealth;
 
+            // Enemy
+            enemyPos = new Vector3(250, 0, 0);
+            enemyCurrentHealth = enemyMaxHealth = 100;
+            enemyHealthValue = (float)enemyCurrentHealth / (float)enemyMaxHealth;
+
             base.Initialize();
         }
 
@@ -46,6 +59,9 @@ namespace CSC316_Project
 
             player = Content.Load<Model>("Player_Mesh");
             playerHealthBar = Content.Load<Texture2D>("HealthBar");
+
+            enemy = Content.Load<Model>("Player_Mesh");
+            enemyHealthBar = Content.Load<Texture2D>("HealthBar");
         }
 
         protected override void UnloadContent()
@@ -83,14 +99,24 @@ namespace CSC316_Project
             Matrix view = Matrix.CreateLookAt(camPos, Vector3.Zero, Vector3.Up);
             Matrix projection = Matrix.CreateOrthographic(GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height, 0.1f, 1000.0f);
 
+            // Player
             world = Matrix.CreateScale(3, 3, 1) * Matrix.CreateTranslation(playerPos);
             player.Draw(world, view, projection);
+
+            // Enemy
+            world = Matrix.CreateScale(15, 15, 1) * Matrix.CreateTranslation(enemyPos);
+            enemy.Draw(world, view, projection);
 
             spriteBatch.Begin();
 
             spriteBatch.Draw(playerHealthBar,
                 new Rectangle(10, 10, (int)(200 * playerHealthValue), 25),
                 new Rectangle(0, 0, (int)(playerHealthBar.Width * playerHealthValue), playerHealthBar.Height),
+                Color.White);
+
+            spriteBatch.Draw(enemyHealthBar,
+                new Rectangle(300, 10, (int)(200 * enemyHealthValue), 25),
+                new Rectangle(0, 0, (int)(enemyHealthBar.Width * enemyHealthValue), enemyHealthBar.Height),
                 Color.White);
 
             spriteBatch.End();
@@ -101,13 +127,17 @@ namespace CSC316_Project
         void updateHealth()
         {
             if (Keyboard.GetState().IsKeyDown(Keys.Left))
-                playerCurrentHealth--;
+                enemyCurrentHealth--;
             if (Keyboard.GetState().IsKeyDown(Keys.Right))
-                playerCurrentHealth++;
+                enemyCurrentHealth++;
 
             // Player
             playerCurrentHealth = MathHelper.Clamp(playerCurrentHealth, 0, playerMaxHealth);
             playerHealthValue = (float)playerCurrentHealth / (float)playerMaxHealth;
+
+            // Enemy
+            enemyCurrentHealth = MathHelper.Clamp(enemyCurrentHealth, 0, enemyMaxHealth);
+            enemyHealthValue = (float)enemyCurrentHealth / (float)enemyMaxHealth;
         }
     }
 }
