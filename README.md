@@ -28,7 +28,7 @@ have secondary and maybe third(ary?) fire that can do greater damage at a cost
   * WASD
 * Keep player within boundary of the screen 
 
-### Milestone 2 - 4/7
+### ~~Milestone 2 - 4/7~~ COMPLETED
 * Basic combat - the player is able to perform a melee attack and shoot a
 projectile
 * Health system - the player and enemy has health and can lose health due to
