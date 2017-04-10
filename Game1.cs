@@ -10,8 +10,15 @@ namespace CSC316_Project
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        // Player
         Model player;
         Vector3 playerPos;
+        int playerCurrentHealth;
+        int playerMaxHealth;
+        float playerHealthValue;
+        Texture2D playerHealthBar;
+
+        // Camera
         Vector3 camPos;
 
         public Game1()
@@ -23,7 +30,11 @@ namespace CSC316_Project
         protected override void Initialize()
         {
             camPos = new Vector3(0, 0, 5);
+
+            // Player
             playerPos = Vector3.Zero;
+            playerCurrentHealth = playerMaxHealth = 100;
+            playerHealthValue = (float)playerCurrentHealth / (float)playerMaxHealth;
 
             base.Initialize();
         }
@@ -34,6 +45,7 @@ namespace CSC316_Project
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             player = Content.Load<Model>("Player_Mesh");
+            playerHealthBar = Content.Load<Texture2D>("HealthBar");
         }
 
         protected override void UnloadContent()
@@ -58,7 +70,7 @@ namespace CSC316_Project
             if (Keyboard.GetState().IsKeyDown(Keys.D) && playerPos.X < 390)
                 playerPos += new Vector3(1, 0, 0);
 
-            Console.WriteLine(playerPos);
+            updateHealth();
 
             base.Update(gameTime);
         }
@@ -74,7 +86,28 @@ namespace CSC316_Project
             world = Matrix.CreateScale(3, 3, 1) * Matrix.CreateTranslation(playerPos);
             player.Draw(world, view, projection);
 
+            spriteBatch.Begin();
+
+            spriteBatch.Draw(playerHealthBar,
+                new Rectangle(10, 10, (int)(200 * playerHealthValue), 25),
+                new Rectangle(0, 0, (int)(playerHealthBar.Width * playerHealthValue), playerHealthBar.Height),
+                Color.White);
+
+            spriteBatch.End();
+
             base.Draw(gameTime);
+        }
+
+        void updateHealth()
+        {
+            if (Keyboard.GetState().IsKeyDown(Keys.Left))
+                playerCurrentHealth--;
+            if (Keyboard.GetState().IsKeyDown(Keys.Right))
+                playerCurrentHealth++;
+
+            // Player
+            playerCurrentHealth = MathHelper.Clamp(playerCurrentHealth, 0, playerMaxHealth);
+            playerHealthValue = (float)playerCurrentHealth / (float)playerMaxHealth;
         }
     }
 }
