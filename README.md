@@ -34,7 +34,7 @@ projectile
 * Health system - the player and enemy has health and can lose health due to
 attacks
 
-### Milestone 3 - 4/21
+### Milestone 3 - ~~4/21~~ Extended to 4/26
 * Basic AI - enemy able to make decisions based on player’s actions 
 * Unique patterns for enemy - create few unique patterns of movements and
 attacks for enemy that is challenging enough for player
