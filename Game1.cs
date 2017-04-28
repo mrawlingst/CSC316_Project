@@ -32,6 +32,9 @@ namespace CSC316_Project
         List<Vector3> playerProjectiles;
         List<Vector3> enemyProjectiles;
 
+        // Keyboard States
+        KeyboardState prevKeyboardState;
+
         // Camera
         Vector3 camPos;
 
@@ -59,6 +62,8 @@ namespace CSC316_Project
             playerProjectiles = new List<Vector3>();
             enemyProjectiles = new List<Vector3>();
 
+            prevKeyboardState = Keyboard.GetState();
+
             base.Initialize();
         }
 
@@ -83,6 +88,7 @@ namespace CSC316_Project
 
         protected override void Update(GameTime gameTime)
         {
+
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
@@ -98,13 +104,15 @@ namespace CSC316_Project
             if (Keyboard.GetState().IsKeyDown(Keys.D) && playerPos.X < 390)
                 playerPos += new Vector3(1, 0, 0);
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Space))
+            if (Keyboard.GetState().IsKeyDown(Keys.Space) && prevKeyboardState.IsKeyUp(Keys.Space))
             {
                 playerProjectiles.Add(playerPos);
             }
 
             updateProjectiles();
             updateHealth();
+
+            prevKeyboardState = Keyboard.GetState();
 
             base.Update(gameTime);
         }
