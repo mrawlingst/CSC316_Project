@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Collections.Generic;
 
 namespace CSC316_Project
 {
@@ -26,6 +27,11 @@ namespace CSC316_Project
         float enemyHealthValue;
         Texture2D enemyHealthBar;
 
+        // Projectile
+        Model projectileModel;
+        List<Vector3> playerProjectiles;
+        List<Vector3> enemyProjectiles;
+
         // Camera
         Vector3 camPos;
 
@@ -49,6 +55,10 @@ namespace CSC316_Project
             enemyCurrentHealth = enemyMaxHealth = 100;
             enemyHealthValue = (float)enemyCurrentHealth / (float)enemyMaxHealth;
 
+            // Projectile
+            playerProjectiles = new List<Vector3>();
+            enemyProjectiles = new List<Vector3>();
+
             base.Initialize();
         }
 
@@ -62,6 +72,8 @@ namespace CSC316_Project
 
             enemy = Content.Load<Model>("Player_Mesh");
             enemyHealthBar = Content.Load<Texture2D>("HealthBar");
+
+            projectileModel = Content.Load<Model>("Player_Mesh");
         }
 
         protected override void UnloadContent()
@@ -86,14 +98,12 @@ namespace CSC316_Project
             if (Keyboard.GetState().IsKeyDown(Keys.D) && playerPos.X < 390)
                 playerPos += new Vector3(1, 0, 0);
 
-            if (Vector3.Distance(playerPos, enemyPos) <= 60)
+            if (Keyboard.GetState().IsKeyDown(Keys.Space))
             {
-                if (Keyboard.GetState().IsKeyDown(Keys.Space))
-                {
-                    enemyCurrentHealth -= 10;
-                }
+                playerProjectiles.Add(playerPos);
             }
 
+            updateProjectiles();
             updateHealth();
 
             base.Update(gameTime);
@@ -116,6 +126,13 @@ namespace CSC316_Project
             {
                 world = Matrix.CreateScale(15, 15, 1) * Matrix.CreateTranslation(enemyPos);
                 enemy.Draw(world, view, projection);
+            }
+
+            // Projectiles
+            foreach (var proj in playerProjectiles)
+            {
+                world = Matrix.CreateScale(3, 3, 1) * Matrix.CreateTranslation(proj);
+                projectileModel.Draw(world, view, projection);
             }
 
             spriteBatch.Begin();
@@ -149,6 +166,22 @@ namespace CSC316_Project
             // Enemy
             enemyCurrentHealth = MathHelper.Clamp(enemyCurrentHealth, 0, enemyMaxHealth);
             enemyHealthValue = (float)enemyCurrentHealth / (float)enemyMaxHealth;
+        }
+
+        void updateProjectiles()
+        {
+            var direction = new Vector3(5, 0, 0);
+
+            for (int i = 0; i < playerProjectiles.Count; i++)
+            {
+                playerProjectiles[i] += direction;
+
+                if (playerProjectiles[i].X > 250)
+                {
+                    playerProjectiles.RemoveAt(i);
+                    i--;
+                }
+            }
         }
     }
 }
