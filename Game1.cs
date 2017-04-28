@@ -26,6 +26,7 @@ namespace CSC316_Project
         int enemyMaxHealth;
         float enemyHealthValue;
         Texture2D enemyHealthBar;
+        double enemyLastFire;
 
         // Projectile
         Model projectileModel;
@@ -57,6 +58,7 @@ namespace CSC316_Project
             enemyPos = new Vector3(250, 0, 0);
             enemyCurrentHealth = enemyMaxHealth = 100;
             enemyHealthValue = (float)enemyCurrentHealth / (float)enemyMaxHealth;
+            enemyLastFire = 0f;
 
             // Projectile
             playerProjectiles = new List<Vector3>();
@@ -109,6 +111,12 @@ namespace CSC316_Project
                 playerProjectiles.Add(playerPos);
             }
 
+            if (gameTime.TotalGameTime.TotalMilliseconds - enemyLastFire >= 1000f)
+            {
+                enemyProjectiles.Add(enemyPos);
+                enemyLastFire = gameTime.TotalGameTime.TotalMilliseconds;
+            }
+
             updateProjectiles();
             updateHealth();
 
@@ -138,6 +146,11 @@ namespace CSC316_Project
 
             // Projectiles
             foreach (var proj in playerProjectiles)
+            {
+                world = Matrix.CreateScale(3, 3, 1) * Matrix.CreateTranslation(proj);
+                projectileModel.Draw(world, view, projection);
+            }
+            foreach (var proj in enemyProjectiles)
             {
                 world = Matrix.CreateScale(3, 3, 1) * Matrix.CreateTranslation(proj);
                 projectileModel.Draw(world, view, projection);
@@ -180,6 +193,7 @@ namespace CSC316_Project
         {
             var direction = new Vector3(5, 0, 0);
 
+            // player
             for (int i = 0; i < playerProjectiles.Count; i++)
             {
                 playerProjectiles[i] += direction;
@@ -187,6 +201,18 @@ namespace CSC316_Project
                 if (playerProjectiles[i].X > 250)
                 {
                     playerProjectiles.RemoveAt(i);
+                    i--;
+                }
+            }
+
+            // enemy
+            for (int i = 0; i < enemyProjectiles.Count; i++)
+            {
+                enemyProjectiles[i] += -direction;
+
+                if (enemyProjectiles[i].X < 0 )
+                {
+                    enemyProjectiles.RemoveAt(i);
                     i--;
                 }
             }
