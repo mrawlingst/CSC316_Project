@@ -204,7 +204,7 @@ namespace CSC316_Project
             {
                 playerProjectiles[i] += direction;
 
-                if (playerProjectiles[i].X > 250)
+                if (playerProjectiles[i].X > 500)
                 {
                     playerProjectiles.RemoveAt(i);
                     i--;
@@ -216,7 +216,7 @@ namespace CSC316_Project
             {
                 enemyProjectiles[i] += enemyProjectilesDirection[i];
 
-                if (enemyProjectiles[i].X < 0 )
+                if (enemyProjectiles[i].X < -500 || enemyProjectiles[i].Y < -500 || enemyProjectiles[i].Y > 500)
                 {
                     enemyProjectiles.RemoveAt(i);
                     enemyProjectilesDirection.RemoveAt(i);
