@@ -216,13 +216,27 @@ namespace CSC316_Project
             {
                 enemyProjectiles[i] += enemyProjectilesDirection[i];
 
-                if (enemyProjectiles[i].X < -500 || enemyProjectiles[i].Y < -500 || enemyProjectiles[i].Y > 500)
+                if (enemyProjectiles[i].X < -500 || enemyProjectiles[i].Y < -500 || enemyProjectiles[i].Y > 500 || distance(enemyProjectiles[i], playerPos) <= 10)
                 {
+                    if (distance(enemyProjectiles[i], playerPos) <= 10)
+                    {
+                        playerCurrentHealth--;
+                    }
+
                     enemyProjectiles.RemoveAt(i);
                     enemyProjectilesDirection.RemoveAt(i);
                     i--;
                 }
             }
+        }
+
+        double distance(Vector3 point1, Vector3 point2)
+        {
+            var x = point2.X - point1.X;
+            var y = point2.Y - point1.Y;
+            var z = point2.Z - point1.Z;
+
+            return Math.Sqrt(Math.Abs((x * x) + (y * y) + (z * z)));
         }
     }
 }
