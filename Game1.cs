@@ -32,6 +32,7 @@ namespace CSC316_Project
         Model projectileModel;
         List<Vector3> playerProjectiles;
         List<Vector3> enemyProjectiles;
+        List<Vector3> enemyProjectilesDirection;
 
         // Keyboard States
         KeyboardState prevKeyboardState;
@@ -63,6 +64,7 @@ namespace CSC316_Project
             // Projectile
             playerProjectiles = new List<Vector3>();
             enemyProjectiles = new List<Vector3>();
+            enemyProjectilesDirection = new List<Vector3>();
 
             prevKeyboardState = Keyboard.GetState();
 
@@ -111,9 +113,13 @@ namespace CSC316_Project
                 playerProjectiles.Add(playerPos);
             }
 
-            if (gameTime.TotalGameTime.TotalMilliseconds - enemyLastFire >= 1000f)
+            if (gameTime.TotalGameTime.TotalMilliseconds - enemyLastFire >= 10f)
             {
                 enemyProjectiles.Add(enemyPos);
+                Random rand = new Random();
+                Vector3 dir = new Vector3(-(float)rand.NextDouble(), MathHelper.Lerp(-1, 1, (float)rand.NextDouble()), 0);
+                dir.Normalize();
+                enemyProjectilesDirection.Add(dir);
                 enemyLastFire = gameTime.TotalGameTime.TotalMilliseconds;
             }
 
@@ -208,11 +214,12 @@ namespace CSC316_Project
             // enemy
             for (int i = 0; i < enemyProjectiles.Count; i++)
             {
-                enemyProjectiles[i] += -direction;
+                enemyProjectiles[i] += enemyProjectilesDirection[i];
 
                 if (enemyProjectiles[i].X < 0 )
                 {
                     enemyProjectiles.RemoveAt(i);
+                    enemyProjectilesDirection.RemoveAt(i);
                     i--;
                 }
             }
