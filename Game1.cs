@@ -108,6 +108,17 @@ namespace CSC316_Project
             if (Keyboard.GetState().IsKeyDown(Keys.D) && playerPos.X < 390)
                 playerPos += new Vector3(1, 0, 0);
 
+            // Enemy movement based on player's pos
+            if (Math.Abs(enemyPos.Y - playerPos.Y) >= 1)
+            {
+                Vector3 dir;
+                if (enemyPos.Y - playerPos.Y >= 0)
+                    dir = new Vector3(0, -0.5f, 0);
+                else
+                    dir = new Vector3(0, 0.5f, 0);
+                enemyPos += dir;
+            }
+
             if (Keyboard.GetState().IsKeyDown(Keys.Space) && prevKeyboardState.IsKeyUp(Keys.Space))
             {
                 playerProjectiles.Add(playerPos);
