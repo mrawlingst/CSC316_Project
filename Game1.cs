@@ -204,8 +204,13 @@ namespace CSC316_Project
             {
                 playerProjectiles[i] += direction;
 
-                if (playerProjectiles[i].X > 500)
+                if (playerProjectiles[i].X > 500 || distance(playerProjectiles[i], enemyPos) <= 10)
                 {
+                    if (distance(playerProjectiles[i], enemyPos) <= 10)
+                    {
+                        enemyCurrentHealth--;
+                    }
+
                     playerProjectiles.RemoveAt(i);
                     i--;
                 }
